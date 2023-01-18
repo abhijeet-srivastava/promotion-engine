@@ -19,6 +19,11 @@ class PromotionEngineTest {
                     "Promotion on SKU A",
                     ImmutableMap.of(skua, 3),
                     130d
+            ),
+            new PromotionRuleSkuQuantity(
+                    "Promotion on SKU B",
+                    ImmutableMap.of(skub, 2),
+                    50d
             )
     ));
 
@@ -31,11 +36,26 @@ class PromotionEngineTest {
         assertEquals(280, postPromotion.calculateCost());
     }
 
+    @Test
+    void testApplyPromotion2() {
+        Cart cart = createCart2();
+        Cart postPromotion = pr.applyPromotions(cart);
+        assertEquals(320, cart.calculateCost());
+        assertEquals(280, postPromotion.calculateCost());
+    }
+
     private Cart createCart1() {
         Cart cart = new Cart();
-        cart.addToCart(skua, 5);
-        cart.addToCart(skub, 1);
-        cart.addToCart(skuc, 1);
-        return cart;
+        cart.addToCart(skua, 5);// 1*130 + 2*50 = 230
+        cart.addToCart(skub, 1);//30
+        cart.addToCart(skuc, 1);//20
+        return cart;//Total = 280
+    }
+    private Cart createCart2() {
+        Cart cart = new Cart();
+        cart.addToCart(skua, 3); //130
+        cart.addToCart(skub, 5);// 2*50 + 30 = 130
+        cart.addToCart(skuc, 1);//20
+        return cart;//280
     }
 }
