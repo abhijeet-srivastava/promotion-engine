@@ -13,7 +13,7 @@ class PromotionEngineTest {
     SKU skua = new SKU("A", 50d);
     SKU skub = new SKU("B", 30d);
     SKU skuc = new SKU("C", 20d);
-    SKU skud = new SKU("A", 15d);
+    SKU skud = new SKU("D", 15d);
 
     PromotionEngine pr = new PromotionEngine(ImmutableSet.of(
             new PromotionRuleSkuQuantity(
@@ -64,7 +64,7 @@ class PromotionEngineTest {
     void testApplyPromotion4() {
         Cart cart = createCart4();
         Cart postPromotion = pr.applyPromotions(cart);
-        assertEquals(370, cart.calculateCost());
+        assertEquals(335, cart.calculateCost());
         assertEquals(290, postPromotion.calculateCost());
     }
 
