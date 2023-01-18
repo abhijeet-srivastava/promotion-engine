@@ -46,6 +46,6 @@ class CartTest {
         cart.addToCart(skua, 1);
         cart.addToCart(skub, 1);
         cart.addToCart(skuc, 1);
-        assertEquals(100, cart.getQuantity(skua));
+        assertEquals(100, cart.calculateCost());
     }
 }
