@@ -5,10 +5,8 @@ import lombok.Getter;
 @Getter
 public abstract class PromotionalRule implements  IPromotionalRule {
     private final String name;
-    private final Integer priority;
 
-    protected PromotionalRule(String name, Integer priority) {
+    protected PromotionalRule(String name) {
         this.name = name;
-        this.priority = priority;
     }
 }
