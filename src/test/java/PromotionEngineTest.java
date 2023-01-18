@@ -44,6 +44,22 @@ class PromotionEngineTest {
         assertEquals(280, postPromotion.calculateCost());
     }
 
+    @Test
+    void testApplyPromotion3() {
+        Cart cart = createCart3();
+        Cart postPromotion = pr.applyPromotions(cart);
+        assertEquals(420, cart.calculateCost());
+        assertEquals(380, postPromotion.calculateCost());
+    }
+
+    private Cart createCart3() {
+        Cart cart = new Cart();
+        cart.addToCart(skua, 5);// 130 + 2*50 = 230
+        cart.addToCart(skub, 5);//2*50 + 30 = 130
+        cart.addToCart(skuc, 1);//20
+        return cart;//Total = 380
+    }
+
     private Cart createCart1() {
         Cart cart = new Cart();
         cart.addToCart(skua, 5);// 1*130 + 2*50 = 230
