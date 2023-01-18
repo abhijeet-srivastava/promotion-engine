@@ -3,6 +3,7 @@ import com.google.common.collect.ImmutableSet;
 import com.test.assignments.models.Cart;
 import com.test.assignments.models.SKU;
 import com.test.assignments.promotions.PromotionRuleSkuQuantity;
+import com.test.assignments.promotions.PromotionalRuleSKUCombination;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +25,14 @@ class PromotionEngineTest {
                     "Promotion on SKU B",
                     ImmutableMap.of(skub, 2),
                     50d
-            )
+            ),
+            new PromotionalRuleSKUCombination(
+                    "Promotion on SKU C & D",
+                    ImmutableMap.of(
+                            skuc, 1,
+                            skud, 1
+                    ),
+                    30d)
     ));
 
 
@@ -50,6 +58,23 @@ class PromotionEngineTest {
         Cart postPromotion = pr.applyPromotions(cart);
         assertEquals(420, cart.calculateCost());
         assertEquals(380, postPromotion.calculateCost());
+    }
+
+    @Test
+    void testApplyPromotion4() {
+        Cart cart = createCart4();
+        Cart postPromotion = pr.applyPromotions(cart);
+        assertEquals(370, cart.calculateCost());
+        assertEquals(335, postPromotion.calculateCost());
+    }
+
+    private Cart createCart4() {
+        Cart cart = new Cart();
+        cart.addToCart(skua, 3);// 130 = 130
+        cart.addToCart(skub, 5);//2*50 + 30 = 130
+        cart.addToCart(skuc, 1);
+        cart.addToCart(skud, 1);//30
+        return cart;//Total = 360
     }
 
     private Cart createCart3() {
