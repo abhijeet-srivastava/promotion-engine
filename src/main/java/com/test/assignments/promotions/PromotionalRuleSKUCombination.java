@@ -33,6 +33,22 @@ public class PromotionalRuleSKUCombination extends PromotionalRule {
 
     @Override
     public Cart apply(Cart cart) {
-        return cart;
+        if(!isApplicable(cart)) {
+            throw new RuntimeException(String.format("Promotion %s is not applicable on Cart", this.getName()));
+        }
+        Cart updatedCart = new Cart(cart);
+        int minPromotionQuantity = Integer.MAX_VALUE;
+        for(Map.Entry<SKU, Integer> promotionSkuEntries : this.requiredSkuQuantities.entrySet()) {
+            int reqQuantity = promotionSkuEntries.getValue();
+            int existingQuantity = updatedCart.getQuantity(promotionSkuEntries.getKey());
+            int promotionalSkuQuantity = existingQuantity/reqQuantity;
+            minPromotionQuantity = Math.min(minPromotionQuantity, promotionalSkuQuantity);
+        }
+        updatedCart.addToCart(new PromotionalSKU(this, this.price), minPromotionQuantity);
+        for(Map.Entry<SKU, Integer> promotionSkuEntries : this.requiredSkuQuantities.entrySet()) {
+            int removedQuantity = minPromotionQuantity*promotionSkuEntries.getValue();
+            updatedCart.removeFromCart(promotionSkuEntries.getKey(), removedQuantity);
+        }
+        return updatedCart;
     }
 }

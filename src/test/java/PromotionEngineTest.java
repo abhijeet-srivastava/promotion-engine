@@ -65,7 +65,7 @@ class PromotionEngineTest {
         Cart cart = createCart4();
         Cart postPromotion = pr.applyPromotions(cart);
         assertEquals(370, cart.calculateCost());
-        assertEquals(335, postPromotion.calculateCost());
+        assertEquals(290, postPromotion.calculateCost());
     }
 
     private Cart createCart4() {
@@ -74,7 +74,7 @@ class PromotionEngineTest {
         cart.addToCart(skub, 5);//2*50 + 30 = 130
         cart.addToCart(skuc, 1);
         cart.addToCart(skud, 1);//30
-        return cart;//Total = 360
+        return cart;//Total = 290
     }
 
     private Cart createCart3() {
