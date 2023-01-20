@@ -3,10 +3,12 @@ import com.google.common.collect.ImmutableSet;
 import com.test.assignments.models.Cart;
 import com.test.assignments.models.SKU;
 import com.test.assignments.promotions.PromotionRuleSkuQuantity;
+import com.test.assignments.promotions.PromotionalRule;
 import com.test.assignments.promotions.PromotionalRuleSKUCombination;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 
 class PromotionEngineTest {
@@ -68,12 +70,42 @@ class PromotionEngineTest {
         assertEquals(290, postPromotion.calculateCost());
     }
 
+    @Test
+    void testPromotionalSkuQuantityException() {
+        Cart cart = createCart5();
+        PromotionalRule pr = new PromotionRuleSkuQuantity(
+                "Promotion on SKU A",
+                ImmutableMap.of(skua, 3),
+                130d
+        );
+        assertThrowsExactly(RuntimeException.class, () -> pr.apply(cart), "Promotion Promotion on SKU A is not applicable on Cart");
+    }
+
+    @Test
+    void testPromotionalSkuCombinationException() {
+        Cart cart = createCart5();
+        PromotionalRule pr = new PromotionalRuleSKUCombination(
+                "CombinationPromotionCnD",
+                ImmutableMap.of(
+                        skua, 2,
+                        skub, 1
+                ),
+                130d
+        );
+        assertThrowsExactly(RuntimeException.class, () -> pr.apply(cart), "Promotion CombinationPromotionCnD is not applicable on Cart");
+    }
+
     private Cart createCart4() {
         Cart cart = new Cart();
         cart.addToCart(skua, 3);// 130 = 130
         cart.addToCart(skub, 5);//2*50 + 30 = 130
         cart.addToCart(skuc, 1);
         cart.addToCart(skud, 1);//30
+        return cart;//Total = 290
+    }
+    private Cart createCart5() {
+        Cart cart = new Cart();
+        cart.addToCart(skua, 2);// 130 = 130
         return cart;//Total = 290
     }
 
